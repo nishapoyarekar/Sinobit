@@ -171,9 +171,7 @@ size_t Sinobit::write(wchar_t c) {
         
         startWrite();
         Serial.begin(9600);
-        Serial.print("debug:::::first line\n");
-        Serial.print("c:::");
-        Serial.print((int)c);
+        
         Serial.print("\n");
         c=c-0x0900;
         Serial.print("new c:::");
@@ -185,8 +183,6 @@ size_t Sinobit::write(wchar_t c) {
         for(int8_t i=0; i<8; i++ ) { // Char bitmap = 12 columns
             
             uint16_t line = hindi[c][i];
-            Serial.print(" i:::"); Serial.print(i);Serial.print("\n");
-            Serial.print("line:::");Serial.print(line);Serial.print("\n");
             
             for(int8_t j=0; line>0; j++, line >>= 1) {
                 

@@ -4,7 +4,7 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_HT1632.h"
 #include "scroll_support.h"
-
+#include "wchar.h"
 
 #define SINOBIT_PAD_P0 (0)
 #define SINOBIT_PAD_P1 (1)
@@ -63,6 +63,11 @@ class Sinobit : public Adafruit_GFX
    void drawPixel(int16_t x, int16_t y, uint16_t color);
    void setReadingDirection(readingDirection_t dir);
    void scroll(String message, uint16_t interstitialDelay);
+#if ARDUINO >= 100
+    size_t write(wchar_t);
+#else
+    void  write(wchar_t);
+#endif
  private:
    boolean translate(int16_t x, int16_t y, int16_t *x_out, int16_t *y_out);
    int8_t characterAdvance(char c, ScrollSupport *scroller);

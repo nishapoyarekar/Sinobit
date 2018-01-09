@@ -1,6 +1,6 @@
 #include "sinobit.h"
 #include "scroll_support.h"
-
+#include "Fonts.h"
 
 #ifndef pgm_read_byte
  #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
@@ -152,7 +152,58 @@ void Sinobit::setReadingDirection(readingDirection_t dir)
   reading_direction = dir;
 }
 
-
+//Nisha -- implementation wide write begins
+#if ARDUINO >= 100
+size_t Sinobit::write(wchar_t c) {
+#else
+    void Sinobit::write(wchar_t c) {
+#endif
+        
+        
+        if((int)c<=255){
+#if ARDUINO >= 100
+            return write((char)c);
+#else
+            write((char)c);
+            return;
+#endif
+        }
+        
+        startWrite();
+        Serial.begin(9600);
+        Serial.print("debug:::::first line\n");
+        Serial.print("c:::");
+        Serial.print((int)c);
+        Serial.print("\n");
+        c=c-0x0900;
+        Serial.print("new c:::");
+        Serial.print((int)c);
+        Serial.print("\n");
+        if(c<0 || c>127){
+            goto out;
+        }
+        for(int8_t i=0; i<8; i++ ) { // Char bitmap = 12 columns
+            
+            uint16_t line = hindi[c][i];
+            Serial.print(" i:::"); Serial.print(i);Serial.print("\n");
+            Serial.print("line:::");Serial.print(line);Serial.print("\n");
+            
+            for(int8_t j=0; line>0; j++, line >>= 1) {
+                
+                if(line & 1) {
+                    writePixel(cursor_x+i, cursor_y+j, textcolor);
+                }
+            }
+        }
+        endWrite();
+        cursor_x += 8;
+    out:
+#if ARDUINO >= 100
+        return 1;
+#endif
+    }
+    
+    //Nisha -- implementation wide write ends
 // Retrieve a character's bounds
 // returns true if spicified char as a glyph
 

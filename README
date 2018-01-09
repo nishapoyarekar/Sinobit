@@ -6,3 +6,6 @@ All text above must be included in any redistribution.
 Recent Arduino IDE releases include the Library Manager for easy installation. Otherwise, to download, click the DOWNLOAD ZIP button, uncompress and rename the uncompressed folder Sinobit. Confirm that the Sinobit folder contains src and examples folders. Place the Sinobit library folder your /Libraries/ folder. You may need to create the Libraries subfolder if its your first library. Restart the IDE.
 
 Also requires the Adafruit_GFX (https://github.com/adafruit/Adafruit-GFX-Library) and HT1632 (https://github.com/adafruit/HT1632) libraries for Arduino.
+
+Nisha's notes: Adding devanagri support. Branches might be in flux and maybe re-written often.
+

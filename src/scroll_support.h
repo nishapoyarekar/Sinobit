@@ -16,7 +16,9 @@ class ScrollSupport
 {
  public:
   static ScrollSupport *makeFor(readingDirection_t dir, String message);
+    static ScrollSupport *makeFor(readingDirection_t dir, wchar_t* wmessage);//Nisha
   ScrollSupport(String aMessage);
+  ScrollSupport(wchar_t* wMessage);//Nisha
   virtual int16_t initialX(int8_t w) = 0;
   virtual int16_t initialY(int8_t h) = 0;
   virtual boolean isFinished(int16_t x, int16_t y, int8_t w, int8_t h) = 0;
@@ -29,12 +31,14 @@ class ScrollSupport
  protected:
 	
   String message;
+    wchar_t* wmessage;//Nisha
 };
 
 class ScrollLeft : public ScrollSupport
 {
  public:
   ScrollLeft(String message);
+    ScrollLeft(wchar_t* wMessage);//Nisha
   int16_t initialX(int8_t w) { return 12; }
   int16_t initialY(int8_t h) { return 6 + (h / 2); }
   boolean isFinished(int16_t x, int16_t y, int8_t w, int8_t h) { return x <= ((int)message.length() * -1 * w); }
@@ -50,6 +54,7 @@ class ScrollRight : public ScrollSupport
 {
  public:
   ScrollRight(String message);
+    ScrollRight(wchar_t* wMessage);//Nisha
   int16_t initialX(int8_t w) { return (int)message.length() * -1 * w; }
   int16_t initialY(int8_t h) { return 6 + (h / 2); }
   boolean isFinished(int16_t x, int16_t y, int8_t w, int8_t h) { return x >= 12; }
@@ -65,6 +70,7 @@ class ScrollUp : public ScrollSupport
 {
  public:
   ScrollUp(String message);
+    ScrollUp(wchar_t* wMessage);//Nisha
   int16_t initialX(int8_t w) { return 6 - (w / 2); }
   int16_t initialY(int8_t h) { return 12 + h; }
   boolean isFinished(int16_t x, int16_t y, int8_t w, int8_t h) { return y <= ((int)message.length() * -1 * h); }

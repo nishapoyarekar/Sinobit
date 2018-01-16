@@ -4,7 +4,9 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_HT1632.h"
 #include "scroll_support.h"
-#include "wchar.h"
+#include <wchar.h>
+
+
 
 #define SINOBIT_PAD_P0 (0)
 #define SINOBIT_PAD_P1 (1)
@@ -63,6 +65,7 @@ class Sinobit : public Adafruit_GFX
    void drawPixel(int16_t x, int16_t y, uint16_t color);
    void setReadingDirection(readingDirection_t dir);
    void scroll(String message, uint16_t interstitialDelay);
+    void scrollW(wchar_t* message, uint16_t interstitialDelay); //Nisha
 #if ARDUINO >= 100
     size_t write(wchar_t);
 #else
@@ -74,6 +77,7 @@ class Sinobit : public Adafruit_GFX
    int8_t fontHeight();
    int8_t fontWidth();
    void printDirectionally(String message, ScrollSupport *scroller);
+    void printWDirectionally(wchar_t* message, ScrollSupport *scroller);//Nisha
    Sinobit_HT1632 leds;
    readingDirection_t reading_direction;
 };

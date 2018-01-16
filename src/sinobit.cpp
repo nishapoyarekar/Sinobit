@@ -2,6 +2,7 @@
 #include "scroll_support.h"
 #include "Fonts.h"
 
+
 #ifndef pgm_read_byte
  #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
 #endif
@@ -170,13 +171,9 @@ size_t Sinobit::write(wchar_t c) {
         }
         
         startWrite();
-        Serial.begin(9600);
-        
-        Serial.print("\n");
+
         c=c-0x0900;
-        Serial.print("new c:::");
-        Serial.print((int)c);
-        Serial.print("\n");
+        
         if(c<0 || c>127){
             goto out;
         }
@@ -296,4 +293,46 @@ void Sinobit::scroll(String message, uint16_t interstitialDelay)
     delay(interstitialDelay);
   }
   delete scroller;
-}  
+}
+    
+    // Nisha : scroll a wstring onto the LED array based on the reading direction that's set
+    
+    void Sinobit::scrollW(wchar_t* message, uint16_t interstitialDelay)
+    {
+        ScrollSupport *scroller = ScrollSupport::makeFor(reading_direction, message);
+        int8_t h = fontHeight();
+        int8_t w = fontWidth();
+        int16_t x = scroller->initialX(w);
+        int16_t y = scroller->initialY(gfxFont ? h : -h);
+        while (!scroller->isFinished(x, y, w, h)) {
+            setCursor(x, y);
+            blankScreen();
+            printWDirectionally(message, scroller);
+            writeScreen();
+            x = scroller->nextX(x);
+            y = scroller->nextY(y);
+            delay(interstitialDelay);
+        }
+        delete scroller;
+    }
+    // print a string using the set reading direction
+    
+    void Sinobit::printWDirectionally(wchar_t* message, ScrollSupport *scroller)
+    {
+        const wchar_t *buffer = message;
+        size_t size = wcslen(message);
+        Serial.begin(9600);
+        Serial.print(wcslen(message));
+        int16_t x = cursor_x;
+        int16_t y = cursor_y;
+        while (size--) {
+            write(*buffer);
+            //drawChar(x, y, *buffer, 1, 0, 1);
+            int8_t advance = characterAdvance(*buffer, scroller);
+            x = scroller->nextCharacterX(x, advance);
+            y = scroller->nextCharacterY(y, advance);
+            buffer++;
+        }
+    }
+    //end Nisha
+

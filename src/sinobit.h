@@ -42,9 +42,9 @@
 
 class Sinobit_HT1632 : public Adafruit_HT1632
 {
- public:
-  Sinobit_HT1632(int8_t data, int8_t wr, int8_t cs, int8_t rd = -1);
-  void blankScreen();
+public:
+    Sinobit_HT1632(int8_t data, int8_t wr, int8_t cs, int8_t rd = -1);
+    void blankScreen();
 };
 
 
@@ -67,17 +67,20 @@ class Sinobit : public Adafruit_GFX
    void scroll(String message, uint16_t interstitialDelay);
     void scrollW(wchar_t* message, uint16_t interstitialDelay); //Nisha
 #if ARDUINO >= 100
-    size_t write(wchar_t);
+    size_t writeW(wchar_t);
 #else
-    void  write(wchar_t);
+    void  writeW(wchar_t);
 #endif
  private:
-   boolean translate(int16_t x, int16_t y, int16_t *x_out, int16_t *y_out);
-   int8_t characterAdvance(char c, ScrollSupport *scroller);
-   int8_t fontHeight();
+    boolean translate(int16_t x, int16_t y, int16_t *x_out, int16_t *y_out);
+    boolean translateW(int16_t x, int16_t y, int16_t *x_out, int16_t *y_out);
+    int8_t characterAdvance(char c, ScrollSupport *scroller);
+    int8_t fontHeight();
    int8_t fontWidth();
    void printDirectionally(String message, ScrollSupport *scroller);
     void printWDirectionally(wchar_t* message, ScrollSupport *scroller);//Nisha
+    void drawWChar(int16_t x, int16_t y, wchar_t c,
+                            uint16_t color, uint16_t bg, uint8_t size);//Nisha
    Sinobit_HT1632 leds;
    readingDirection_t reading_direction;
 };

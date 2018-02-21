@@ -2,7 +2,7 @@
 #define __SCROLL_SUPPORT__
 
 #include <Arduino.h>
-
+#include <wchar.h>
 
 typedef enum {
   TopToBottom,
@@ -22,6 +22,7 @@ class ScrollSupport
   virtual int16_t initialX(int8_t w) = 0;
   virtual int16_t initialY(int8_t h) = 0;
   virtual boolean isFinished(int16_t x, int16_t y, int8_t w, int8_t h) = 0;
+      virtual boolean isFinishedW(int16_t x, int16_t y, int8_t w, int8_t h) = 0;
   virtual int16_t nextX(int16_t x) = 0;
   virtual int16_t nextY(int16_t y) = 0;
   virtual int16_t nextCharacterX(int16_t x, int8_t advance) = 0;
@@ -42,6 +43,7 @@ class ScrollLeft : public ScrollSupport
   int16_t initialX(int8_t w) { return 12; }
   int16_t initialY(int8_t h) { return 6 + (h / 2); }
   boolean isFinished(int16_t x, int16_t y, int8_t w, int8_t h) { return x <= ((int)message.length() * -1 * w); }
+    boolean isFinishedW(int16_t x, int16_t y, int8_t w, int8_t h) { return x <= ((int)wcslen(wmessage) * -1 * w); }
   int16_t nextX(int16_t x) { return x - 1; }
   int16_t nextY(int16_t y) { return y; }
   int16_t nextCharacterX(int16_t x, int8_t advance) { return x + (int16_t)advance; }
@@ -58,6 +60,7 @@ class ScrollRight : public ScrollSupport
   int16_t initialX(int8_t w) { return (int)message.length() * -1 * w; }
   int16_t initialY(int8_t h) { return 6 + (h / 2); }
   boolean isFinished(int16_t x, int16_t y, int8_t w, int8_t h) { return x >= 12; }
+      boolean isFinishedW(int16_t x, int16_t y, int8_t w, int8_t h) { return x >= 12; }
   int16_t nextX(int16_t x) { return x + 1; }
   int16_t nextY(int16_t y) { return y; }
   int16_t nextCharacterX(int16_t x, int8_t advance) { return x + (int16_t)advance; }
@@ -74,6 +77,7 @@ class ScrollUp : public ScrollSupport
   int16_t initialX(int8_t w) { return 6 - (w / 2); }
   int16_t initialY(int8_t h) { return 12 + h; }
   boolean isFinished(int16_t x, int16_t y, int8_t w, int8_t h) { return y <= ((int)message.length() * -1 * h); }
+boolean isFinishedW(int16_t x, int16_t y, int8_t w, int8_t h) { return y <= ((int)wcslen(wmessage) * -1 * h); }
   int16_t nextX(int16_t x) { return x; }
   int16_t nextY(int16_t y) { return y - 1; }
   int16_t nextCharacterX(int16_t x, int8_t advance) { return x; }

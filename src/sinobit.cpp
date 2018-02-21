@@ -306,7 +306,7 @@ size_t Sinobit::writeW(wchar_t c) {
         int16_t x = scroller->initialX(w);
         int16_t y = scroller->initialY(gfxFont ? h : -h);
         //Serial.print(scroller->isFinished(x, y, w, h));
-        while (true) {
+        while (!scroller->isFinishedW(x, y, w, h)) {
             setCursor(x, y);
             blankScreen();
             printWDirectionally(message, scroller);
@@ -344,7 +344,7 @@ size_t Sinobit::writeW(wchar_t c) {
         if(c<0 || c>127){
             return;
         }
-        for(int8_t i=0; i<8; i++ ) { // Char bitmap = 12 columns
+        for(int8_t i=0; i<12; i++ ) { // Char bitmap = 12 columns
             uint16_t line = hindi[c][i];
             
             for(int8_t j=0; line>0; j++, line >>= 1) {
